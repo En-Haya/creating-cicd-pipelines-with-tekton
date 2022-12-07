@@ -31,5 +31,5 @@ spec:
           ibmcloud plugin list;
           ibmcloud plugin update cloud-functions;
           ibmcloud plugin list;
-         ibmcloud target -g HB;
+          ibmcloud target -g HB;
 # ibmcloud ce app create --name hello-tekton --build-source . ;  This will work in you have a paid code engine version
