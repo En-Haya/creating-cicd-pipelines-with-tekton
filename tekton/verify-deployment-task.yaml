@@ -25,13 +25,40 @@ spec:
         - set -e -o pipefail;
           ibmcloud login -a $(params.api-url) -r $(params.ibm-cloud-region);
           ibmcloud target --cf;
- #        ibmcloud fn action get helloTekton; <- get result back as variable?
- #       
- #       /*
- #       
- #       
- #       Comparison code here
- #       
- #       
- #       Verification string? ->"I'm a cloud native developer now!"
- #        */
+  steps:
+   - name: verify-app
+	   image: ibmcom/pipeline-base-image:2.7
+		 ...
+     command: ["/bin/bash", "-c"]
+     args:
+      - set -e -o pipefail;
+	      ibmcloud login -a $(params.api-url) -r $(params
+	      ibm-cloud-region);
+	      ibmcloud target --cf;
+        ibmcloud fn action invoke helloJava -r
+        echo "return value="$?
+        exit $?
+        # Test the application function's integer return value
+        if [ $? -eq 0 ]
+        then
+	         echo "Success"
+	         exit 0
+        else
+	         echo "Failure" >&2
+	         exit 1
+         fi
+         # Update the application invoke command to capture the JSON response
+          response="$(ibmcloud fn action invoke helloJava -r)"
+
+         # String to test for within the JSON response
+          TEST='Congratulations'
+
+         # Test the application function's JSON response as a string
+          if [[ "$response" == *"$TEST"* ]]
+          then
+	           echo "Success"
+	           #exit 0
+         else
+	          echo "Failure" >&2
+	          #exit 1
+         fi
